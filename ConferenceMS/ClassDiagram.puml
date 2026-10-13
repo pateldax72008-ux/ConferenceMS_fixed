@@ -1,0 +1,64 @@
+@startuml
+skinparam classAttributeIconSize 0
+abstract class Person {
+  # id : int
+  # name : string
+  + getId() : int
+  + getName() : string
+  + setName(n : string) : void
+  + display() : void
+  + toRecord() : string
+  + getRole() : string
+}
+class Speaker {
+  - topic : string
+  + getTopic() : string
+  + setTopic(t : string) : void
+}
+class Participant {
+  - phone : string
+  + getPhone() : string
+  + setPhone(p : string) : void
+}
+class Session {
+  - sessionId : int
+  - title : string
+  - speakerId : int
+  - time : string
+  - capacity : int
+}
+class Registration {
+  - registrationId : int
+  - participantId : int
+  - sessionId : int
+  - active : bool
+  + cancel() : void
+}
+class Conference {
+  - speakers : Speaker*
+  - participants : Participant*
+  - sessions : Session*
+  - registrations : Registration*
+  + addSpeaker() : int
+  + addParticipant() : int
+  + scheduleSession() : int
+  + registerParticipant() : int
+  + cancelRegistration() : void
+  + report() : void
+}
+class FileManager {
+  - dir : string
+  + save(c : Conference) : void
+  + load(c : Conference) : void
+}
+Person <|-- Speaker
+Person <|-- Participant
+Conference "1" o-- "0..*" Speaker
+Conference "1" o-- "0..*" Participant
+Conference "1" o-- "0..*" Session
+Conference "1" o-- "0..*" Registration
+Speaker "1" <-- "0..*" Session : speakerId
+Participant "1" <-- "0..*" Registration : participantId
+Session "1" <-- "0..*" Registration : sessionId
+FileManager ..> Conference : saves/loads
+@enduml
